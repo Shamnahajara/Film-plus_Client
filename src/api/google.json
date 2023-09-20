@@ -1,0 +1,10 @@
+{"web":{
+    "client_id":"1070072108029-fag87uqcnh33gplrfpenb6np1fo2kicc.apps.googleusercontent.com",
+    "project_id":"film-plus-395708",
+    "auth_uri":"https://accounts.google.com/o/oauth2/auth",
+    "token_uri":"https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret":"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",
+    "redirect_uris":["http://localhost:5173","http://localhost:5173/"],
+    "javascript_origins":["http://localhost:5173"]
+    }}

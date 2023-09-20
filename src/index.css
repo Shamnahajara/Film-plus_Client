@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body,
+html{
+    font-family: 'poppins',sans-serif;
+    font-weight: 400;
+}
+input:focus,textarea:focus,select:focus{
+    outline:0 !important;
+    box-shadow: none !important;
+
+}
+
+/* basic class for tailwind */
+
+.linear-bg{
+    background: linear-gradient(269.82deg, #07091c00 0.17% , #080a1ad6 99.87%);
+}
+
+.hoveres{
+    @apply hidden
+}
+.hovered:hover .hoveres{
+    @apply flex-colo
+}
+
+.flex-colo {
+    @apply flex flex-col justify-center items-center
+}
+.flex-rows{
+    @apply flex flex-row justify-center items-center
+}
+.flex-btn{
+    @apply flex  justify-between items-center
+}
+
+.trnasitions{
+    @apply transition duration-500 ease-in
+}
+.zIndex{
+    z-index: 1000;
+}
