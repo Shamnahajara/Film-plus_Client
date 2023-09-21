@@ -7,7 +7,7 @@ function Movie({movie,addTofav,favorites=[], remove}) {
  
   return (
     <>
-    <div className=' p-1 hover:scale-95 transitions relative rounded overflow-hidden'>
+    <div className=' p-1 hover:scale-95 transition-transform relative rounded overflow-hidden'>
       <Link to={`/movie/${movie._id}`} className='w-full '>
       <img src={`${imageURL+movie.poster_path}`} alt='' className='w-full h-64 object-cover'/>
       </Link>

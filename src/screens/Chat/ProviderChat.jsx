@@ -1,11 +1,12 @@
+import { useState , useEffect } from 'react'
 import profile from '../../images/Murphy.jpeg'
 import {AiOutlinePaperClip} from 'react-icons/ai'
 import {RiSendPlaneFill} from 'react-icons/ri'
-import axiosInstance from '../../api/axios'
-import { useState,useEffect } from 'react'
 import {useSelector} from 'react-redux'
+import axiosInstance from '../../api/axios'
 
-function Chat() {
+function ProviderChat() {
+
     const {userId} = useSelector((state)=>state.User)
     const [user,setUser] = useState('')
     const [allUsers,setAllusers] = useState([])
@@ -18,17 +19,17 @@ function Chat() {
   return (
     <div>
         <div>
-            <div className='relative min-h-screen flex flex-col bg-main' >
+            <div className='relative min-h-screen flex flex-col bg-gray-50' >
                 {/* chat layout starts here */}
                 <div className='flex-grow w-full max-w-7xl mx-auto lg:flex'>
                     <div className=' flex-1 min-w-0 xl:flex'>
-                        <div className='border-b border-gray-200 xl:flex-shrink-0 xl:w-64  xl:border-r xl:border-gray-200 bg-main'>
+                        <div className='border-b border-gray-200 xl:flex-shrink-0 xl:w-64  xl:border-r xl:border-gray-200 bg-gray-50'>
                             <div className='h-full pl-4 pr-2 py-6 sm:pl-6 lg:pl-8 xl:pl-0'>
                                 <div className='h-full relative'>
 
                                     <div className='relative rounded-lg px-2 py-2 flex items-center space-x-3 hover:border-gray-400 focus-within:right-2 focus-within:ring-offset-2 focus-within:ring-red-500 mb-4'>
                                         <div className='flex-shrink-0'>
-                                            <img src={user?.profileImage} alt=""  className='h-12 w-12 rounded-full'/>
+                                            <img src={user.profileImage} alt=""  className='h-12 w-12 rounded-full'/>
                                         </div>
                                         <div className='flex-1 min-w-0'>
                                             <a href=''  className='focus:outline-none'>
@@ -60,8 +61,7 @@ function Chat() {
                                         </div>
                                     {/* search box ends */}
                                     {/* users */}
-
-                                    <div className='relative rounded-lg px-2 py-2  flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 hover:bg-gray-400'>
+                                    <div className='relative rounded-lg px-2 py-2  flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 bg-gray-200'>
                                         <div className='flex-shrink-0'>
                                             <img src={profile} alt=""  className='w-10 h-10 rounded-full'/>
                                         </div>
@@ -81,7 +81,7 @@ function Chat() {
                                         </div>
                                     </div>
                                     {/* users 2 */}
-                                    <div className='relative rounded-lg px-2 py-2  flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 hover:bg-gray-400'>
+                                    <div className='relative rounded-lg px-2 py-2  flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 bg-gray-200'>
                                         <div className='flex-shrink-0'>
                                             <img src={profile} alt=""  className='w-10 h-10 rounded-full'/>
                                         </div>
@@ -101,7 +101,7 @@ function Chat() {
                                         </div>
                                     </div>
                                     {/* users 3 */}
-                                    <div className='relative rounded-lg px-2 py-2  flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 hover:bg-gray-400'>
+                                    <div className='relative rounded-lg px-2 py-2  flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 bg-gray-200'>
                                         <div className='flex-shrink-0'>
                                             <img src={profile} alt=""  className='w-10 h-10 rounded-full'/>
                                         </div>
@@ -182,7 +182,7 @@ function Chat() {
                                 <div className='flex items-end'>
                                     <div className='flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start'>
                                         <div>
-                                            <span className='px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-400 text-white'>
+                                            <span className='px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-200 text-gray-600'>
                                                 Lorem ipsum
                                             </span>
                                         </div>
@@ -195,7 +195,7 @@ function Chat() {
                                 <div className='flex items-end'>
                                     <div className='flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start'>
                                         <div>
-                                            <span className='px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-400 text-white'>
+                                            <span className='px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-200 text-gray-600'>
                                                 Lorem ipsum wwwwwww
                                             </span>
                                         </div>
@@ -222,7 +222,7 @@ function Chat() {
                                 <div className='flex items-end'>
                                     <div className='flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start'>
                                         <div>
-                                            <span className='px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-400 text-white'>
+                                            <span className='px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-200 text-gray-600'>
                                                 Lorem ipsum wwwwwww
                                             </span>
                                         </div>
@@ -235,7 +235,7 @@ function Chat() {
                                 <div className='flex items-end'>
                                     <div className='flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start'>
                                         <div>
-                                            <span className='px-4 py-2 rounded-lg inline-block rounded-bl-none  bg-gray-400 text-white'>
+                                            <span className='px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-200 text-gray-600'>
                                                 Lorem ipsum wwwwwww shzxn
                                             </span>
                                         </div>
@@ -272,7 +272,7 @@ function Chat() {
                             </div>
                           </div>
                         {/* message ends hera */}
-                            <div className='border-t-2 border-gray-200 px-4 pt-4  mb-16'>
+                        <div className='border-t-2 border-gray-200 px-4 pt-4  mb-16'>
                                 <div className='relative flex'>
                                     <span className='absolute insert-y-0 flex  items-center'>
                                       <button 
@@ -289,47 +289,6 @@ function Chat() {
                             </div>
                         </div>
                     </div>
-
-                    {/* <div className='bg-main pr-4 sm:pr-6 lg:pr-8 lg:flex-shrink-0 lg:border-l lg:border-gray-200 xl:pr-0 hidden xl:block'>
-                        <div className='h-full py-6 pl-6 lg:w-80 '>
-                            <div className='h-full relative'>
-                                <div className='m-auto text-center mb-10'>
-                                    <img className='w-36 h-36 rounded-full m-auto' src={profile} alt="" />
-                                    <h2 className='m-auto text-gray-300 text-2xl mt-2'>Kina Nayer</h2>
-                                    <p className='m-auto text-gray-300 mt-2'  >kinanayer@gmail.com</p>
-                                </div>
-                                <div className='mb-2'>
-                                    <h2 className='text-gray-300'>Attachments</h2>
-                                </div>
-                                <div className='grid grid-cols-4 gap-2'>
-                                    <div>
-                                        <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
-                                    </div>
-                                    <div>
-                                        <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
-                                    </div>
-                                    <div>
-                                        <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
-                                    </div>
-                                    <div>
-                                        <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
-                                    </div>
-                                    <div>
-                                        <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
-                                    </div>
-                                    <div>
-                                        <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
-                                    </div>
-                                    <div>
-                                        <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
-                                    </div>
-                                    <div>
-                                        <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
                 </div>
             </div>
         </div>
@@ -337,4 +296,4 @@ function Chat() {
   )
 }
 
-export default Chat
+export default ProviderChat

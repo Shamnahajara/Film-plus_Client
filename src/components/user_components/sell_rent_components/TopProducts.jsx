@@ -4,6 +4,7 @@ import { BsCollectionFill } from 'react-icons/bs';
 import Product from '../../../components/user_components/sell_rent_components/Product'
 
 function TopProducts({products,onEditFunction}) {
+  console.log("products in top products",products)
 
   return (
     <div className='my-16'>

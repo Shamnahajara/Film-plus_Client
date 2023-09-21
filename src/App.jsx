@@ -29,7 +29,8 @@ import ProductDetail from './screens/ProductDetail'
 import ProductLists from './screens/ProductLists'
 import PaymentSuccess from './components/PaymentSuccess'
 import PaymentFail from './components/PaymentFail'
-import Chat from './screens/Chat/Chat'
+import Community from './screens/Community'
+import Chatwithprovider from './screens/Chatwithprovider'
 
 
 function App() {
@@ -63,14 +64,15 @@ function App() {
        <Route path='/addproduct' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<AddProduct/>:<Navigate to='/login'/>} />
        <Route path='/productDetail/:id' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<ProductDetail/>:<Navigate to='/login'/>} />
        <Route path='/productlists' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<ProductLists/>:<Navigate to='/login'/>} />
-
+       <Route path='/chatwithprovider' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<Chatwithprovider/>:<Navigate to='/login'/>} />
        {/* Payment Routes */}
        <Route path="/paymentSuccess/:load" element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<PaymentSuccess/>:<Navigate to='/login'/>} />
        <Route path='/paymentFail' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<PaymentFail/>:<Navigate to='/login'/>} />
 
        {/* Community page routes */}
-       <Route path='/communities' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<Chat/>:<Navigate to='/login'/>} />    
-        
+       <Route path='/communities' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<Community/>:<Navigate to='/login'/>} />    
+       
+
         {/*ADMIN-ROUTE*/}
         <Route path='/admin/*' element={<AdminRoute/>}/>
         

@@ -9,14 +9,15 @@ import { HiLocationMarker } from 'react-icons/hi';
 import { useEffect, useState } from 'react';
 import axiosInstance from '../api/axios'
 import RentFormModal from '../components/Modals/RentFormModal';
-
+import {  useSelector } from 'react-redux';
 
 function ProductDetail() {
 
-
   const [modalOpen,setModalOpen] = useState(false)
   const [Product,setProducts] = useState(null)
+  const {userId} = useSelector((state)=>state.User)
 
+ 
   const onEditFunction = (id)=>{
     setProduct(id)
     setModalOpen(!modalOpen)
@@ -39,6 +40,9 @@ function ProductDetail() {
           }
         });
       }, [id]);
+      console.log("product" ,product);
+
+      console.log(userId == product.providerId?._id);
 
     return (
         <Layout>
@@ -104,11 +108,15 @@ function ProductDetail() {
                         </div>
                       
                         {/* chat button */}
-                        <div className='sm:col-span-2 col-span-3 flex justify-end font-medium text-sm '>
-                          <Link to='' className='bg-dry hover:bg-subMain transitions border-2 border-subMain rounded-full flex-rows gap-4 w-full sm:py-3 '>
-                             <BsFillChatLeftDotsFill className='w-3 h-3'/> Chat with provider
-                          </Link>
-                        </div> 
+                        {userId == product.providerId?._id ?
+                        <button className='btn btn-primary'></button> : 
+                         <div className='sm:col-span-2 col-span-3 flex justify-end font-medium text-sm '>
+                         <Link to='/chatwithprovider' className='bg-dry hover:bg-subMain transitions border-2 border-subMain rounded-full flex-rows gap-4 w-full sm:py-3 '>
+                            <BsFillChatLeftDotsFill className='w-3 h-3'/> Chat with provider
+                         </Link>
+                       </div>
+                         }
+                       
                     </div>
                 </div>
             </div>

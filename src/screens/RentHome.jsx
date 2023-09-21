@@ -30,6 +30,7 @@ function RentHome() {
   useEffect(() => {
     axiosInstance.get('/user/getproducts').then((res) => {
       if (res.data) {
+        console.log("rent product ",res.data.products);
         const filteredProducts = res.data.products.filter((product) => {
           return !product.isUnlisted && !product.isRented;
         });

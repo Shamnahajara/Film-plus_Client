@@ -58,18 +58,22 @@ function Watchpage() {
             src={`https://www.youtube.com/embed/${trailerKey}`}
             frameBorder='0'
             allowFullScreen
-            className='rounded w-full h-full'
+            className='rounded w-full h-screen'
           />
           
         ) : (
           <div className='w-full h-screen rounded-lg overflow-hidden relative'>
             <div className='absolute top-0 left-0 bottom-0 right-0 bg-main bg-opacity-30 flex-col justify-center items-center'>
+              <div className='flex  h-full justify-center items-center'>
               <button
                 onClick={() => setPlay(true)}
                 className='bg-white text-subMain border border-subMain rounded-full w-20 h-20 font-medium text-xl'
               >
+                <div className='flex  h-full justify-center items-center'>
                 <FaPlay />
+                </div>
               </button>
+              </div>
             </div>
             <img
               src={`${imageURL+movie.backdrop_path}`}
