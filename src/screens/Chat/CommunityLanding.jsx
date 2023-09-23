@@ -4,20 +4,8 @@ import axiosInstance from '../../api/axios'
 import {useSelector} from 'react-redux'
 
 function CommunityLanding() {
-    const [username,setUsername] = useState('')
-    const [bio , setBio] = useState('')
-    const [genre ,setGenre] = useState([])
-    const {userId}  = useSelector((state)=>state.User)
-
-    const handleSubmit = async ()=>{
-        if(username.trim().length==0 || bio.trim().length==0|| genre.length == 0){
-            toast.error('please fill all the fields for better expiriance')
-        }else{
-            axiosInstance.patch(`/partofcommunity/${userId}`)
-        }
-    }
-
-
+  const {userId}  = useSelector((state)=>state.User)
+  
   return (
     <>
       <div
@@ -49,20 +37,74 @@ function CommunityLanding() {
       </div>
 
       <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle ">
-  <div className="modal-box">
-    <h3 className="font-bold text-lg">"Let's Get to Know You Better 😊</h3>
-    <p className="py-4">Before you become a part of our vibrant film community, please tell us a bit about yourself. These details will help other members connect with you and enrich your experience on [Your Website Name]. Don't worry, you can control what information is publicly visible.</p>
+  <div className="modal-box bg-main">
+    <h3 className="font-bold text-lg">"Let's Get to Know You Better" 😊</h3>
+    <p className="py-4">Before you become a part of our vibrant film community, please tell us a bit about yourself. These details will help other members connect with you and enrich your experience on Film-Plus.</p>
     <div className="form-control w-full max-w-xs">
-  <label className="label">
-    <span className="label-text">What is your name?</span>
-  </label>
-  <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs" />
+    <select className="select select-primary w-full max-w-xs" name="workingAs">
+  <option disabled selected value="">👩‍🎬Working as</option>
+  <option value="Videographer">Videographer</option>
+  <option value="Editor">Editor</option>
+  <option value="Writer">Writer</option>
+  <option value="Film Critic">Film Critic</option>
+  <option value="Sound Producer">Sound Producer</option>
+  <option value="Actor/Actress">Actor/Actress</option>
+  <option value="Director">Director</option>
+  <option value="Producer">Producer</option>
+  <option value="Cinematographer">Cinematographer</option>
+  <option value="Production Designer">Production Designer</option>
+  <option value="Costume Designer">Costume Designer</option>
+  <option value="Makeup Artist">Makeup Artist</option>
+  <option value="Film Student">Film Student</option>
+  <option value="Other">Other</option>
+
+</select>
+
+<br></br>
+<select className="select select-primary w-full max-w-xs" name="preferredLanguage">
+  <option disabled selected value="">🍿Preferred language?</option>
+  <option value="English">English</option>
+  <option value="Spanish">Spanish</option>
+  <option value="French">French</option>
+  <option value="German">German</option>
+  <option value="Hindi">Hindi</option>
+  <option value="Arabic">Arabic</option>
+  <option value="Chinese">Chinese</option>
+  <option value="Japanese">Japanese</option>
+  <option value="Korean">Korean</option>
+  <option value="Russian">Russian</option>
+  <option value="Portuguese">Portuguese</option>
+  <option value="Italian">Italian</option>
+  <option value="Dutch">Dutch</option>
+  <option value="Swedish">Swedish</option>
+  <option value="Other">Other</option>
+</select>
+
+ <br></br>
+ <select className="select select-primary w-full max-w-xs" name="favoriteGenre">
+  <option disabled selected value="">🎭Favorite genre?</option>
+  <option value="Drama">Drama</option>
+  <option value="Comedy">Comedy</option>
+  <option value="Romantic">Romantic</option>
+  <option value="Thriller">Thriller</option>
+  <option value="Action">Action</option>
+  <option value="Fantasy">Fantasy</option>
+  <option value="Science Fiction">Science Fiction</option>
+  <option value="Horror">Horror</option>
+  <option value="Documentary">Documentary</option>
+  <option value="Animation">Animation</option>
+  <option value="Mystery">Mystery</option>
+  <option value="Adventure">Adventure</option>
+  <option value="Crime">Crime</option>
+  <option value="Family">Family</option>
+  <option value="Musical">Musical</option>
+</select>
 </div>
     <div className="modal-action">
       <form method="dialog">
-        {/* if there is a button in form, it will close the modal */}
-        <button className="btn">Close</button>
-      </form>
+        <button className="btn btn-sm btn-outline btn-ghost">Close</button>
+        </form>
+        <button className="btn btn-sm btn-outline btn-primary ">Submit</button>
     </div>
   </div>
 </dialog>

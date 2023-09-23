@@ -64,7 +64,7 @@ function App() {
        <Route path='/addproduct' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<AddProduct/>:<Navigate to='/login'/>} />
        <Route path='/productDetail/:id' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<ProductDetail/>:<Navigate to='/login'/>} />
        <Route path='/productlists' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<ProductLists/>:<Navigate to='/login'/>} />
-       <Route path='/chatwithprovider' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<Chatwithprovider/>:<Navigate to='/login'/>} />
+       <Route path='/chatwithprovider/:providerId' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<Chatwithprovider/>:<Navigate to='/login'/>} />
        {/* Payment Routes */}
        <Route path="/paymentSuccess/:load" element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<PaymentSuccess/>:<Navigate to='/login'/>} />
        <Route path='/paymentFail' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<PaymentFail/>:<Navigate to='/login'/>} />

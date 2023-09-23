@@ -109,9 +109,13 @@ function ProductDetail() {
                       
                         {/* chat button */}
                         {userId == product.providerId?._id ?
-                        <button className='btn btn-primary'></button> : 
                          <div className='sm:col-span-2 col-span-3 flex justify-end font-medium text-sm '>
-                         <Link to='/chatwithprovider' className='bg-dry hover:bg-subMain transitions border-2 border-subMain rounded-full flex-rows gap-4 w-full sm:py-3 '>
+                         <Link to={`/chatwithprovider/${product.providerId?._id}`} className='bg-dry hover:bg-subMain transitions border-2 border-subMain rounded-full flex-rows gap-4 w-full sm:py-3 '>
+                            <BsFillChatLeftDotsFill className='w-3 h-3'/> New Messages
+                         </Link>
+                       </div> : 
+                         <div className='sm:col-span-2 col-span-3 flex justify-end font-medium text-sm '>
+                         <Link to={`/chatwithprovider/${product.providerId?._id}`} className='bg-dry hover:bg-subMain transitions border-2 border-subMain rounded-full flex-rows gap-4 w-full sm:py-3 '>
                             <BsFillChatLeftDotsFill className='w-3 h-3'/> Chat with provider
                          </Link>
                        </div>

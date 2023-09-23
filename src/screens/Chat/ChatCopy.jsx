@@ -318,9 +318,7 @@ function Chat() {
                                     </span>
                                     <input placeholder='type here' className='border focus:ring-red-500 focus:border-red-500 w-full focus:placeholder-gray-400 text-gray-600 placeholder-gray-400 pl-12 bg-gray-100 rounded-full py-3 border-gray-200'/>
                                 </div>
-
                             </div>
-
                         </div>
                     </div>
 
