@@ -2,6 +2,7 @@ import { useSelector,useDispatch } from 'react-redux'
 import { userLogout } from '../../store/slice/user'
 import {Link, NavLink} from 'react-router-dom'
 import {FaUser,FaUsers, FaHeart, FaSearch} from 'react-icons/fa'
+import {BsFillChatLeftTextFill} from 'react-icons/bs'
 
 
 function NavBar() {
@@ -39,10 +40,14 @@ function NavBar() {
             <NavLink to="/communities" className={Hover}>Communities</NavLink> 
             {
             token? <NavLink to='/login'className={Hover} onClick={()=>{dispatch(userLogout()) }} >Logout</NavLink> :
-            <NavLink className={Hover} to='/login'>Login</NavLink> } 
+            <NavLink className={Hover} to='/login'>Login</NavLink> }
+            <NavLink to="/chat" className={`${Hover} relative`}>
+                <BsFillChatLeftTextFill className='w-6 h-6'/>
+                {/* <div className='w-5 h-5 flex-colo rounded-full text-xs bg-subMain text-white absolute -top-5 -right-1'>7</div> */}
+            </NavLink> 
             <NavLink to="/favorites" className={`${Hover} relative`}>
                 <FaHeart className='w-6 h-6'/>
-                <div className='w-5 h-5 flex-colo rounded-full text-xs bg-subMain text-white absolute -top-5 -right-1'>3</div>
+                {/* <div className='w-5 h-5 flex-colo rounded-full text-xs bg-subMain text-white absolute -top-5 -right-1'>3</div> */}
             </NavLink> 
             <NavLink to="/profile" className={Hover}><FaUser className='w-6 h-6'/></NavLink>        
            

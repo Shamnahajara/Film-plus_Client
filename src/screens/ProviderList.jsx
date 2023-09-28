@@ -39,7 +39,7 @@ const Rows = (product,i,returned,sendMail)=>{
                </button> : <span className="text-green-500 px-1">completed</span>
               }
                 {
-                  !product.returned ? <button 
+                  product.returned ? <button 
                    onClick={()=>returned(product._id,product.productId)}
                    className='border border-boarder  flex-rows gap-2 text-green-500 py-1 px-1 rounded flex-colo w-18 h-7'>
                   Returned

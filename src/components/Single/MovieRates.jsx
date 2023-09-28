@@ -8,30 +8,31 @@ import emtyProfile from '../../images/emptyProfile.webp'
 function MovieRates({movie,reviews,addReview}) {
   const Ratings = [
     {
-      title : '0 - poor',
-      value :0
+      title: 'Poor 😞',
+      value: 0,
     },
     {
-      title : '1 - fair',
-      value :1
+      title: 'Fair 😐',
+      value: 1,
     },
     {
-      title : '2 - good',
-      value :2
+      title: 'Good 😊',
+      value: 2,
     },
     {
-      title : '3 - Very good',
-      value :3
-    },
-     {
-      title : '4 - Excellent',
-      value :4
+      title: 'Very good 😄',
+      value: 3,
     },
     {
-        title : '5 - master Piece',
-        value :5
-    }
-  ]
+      title: 'Excellent 😃',
+      value: 4,
+    },
+    {
+      title: 'Masterpiece 🤩',
+      value: 5,
+    },
+  ];
+  
 
    
     const [rating,setRating] = useState(-1)
@@ -73,10 +74,9 @@ function MovieRates({movie,reviews,addReview}) {
             {
               reviews.map((data,i)=>(
                 <div key={i} className='md:grid flex flex-col w-full grid-cols-12 gap-6 bg-dry p-4 border border-gray-800 rounded-lg'>
-                  <div className='col-span-2 bg-main hidden md:block'>
-                   {data?.profileImage ? <img src={data?.profileImage} alt='' className='w-full h-20 rounded-lg object-cover'/>:
-                   <img src={emtyProfile } alt='' className='w-full h-20 rounded-lg object-cover'/>} 
-                    </div>
+                  <div className='col-span-2 bg-main border border-gray-500 rounded-full h-16 hidden md:block'>
+                   <img src={data?.userId?.profileImage} alt='' className='w-full h-16 rounded-full object-cover'/>
+                  </div>
                     <div className='col-span-7 flex flex-col gap-2'>
                       <h2>{data?.userId?.name}</h2>
                       <p className='text-xs leading-6 font-medium text-text'>{data?.review}</p>

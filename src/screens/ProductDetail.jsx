@@ -30,7 +30,6 @@ function ProductDetail() {
   })
 
     const {id} = useParams()
-    
     const [product,setProduct] = useState([])
 
     useEffect(() => {
@@ -40,9 +39,8 @@ function ProductDetail() {
           }
         });
       }, [id]);
-      console.log("product" ,product);
 
-      console.log(userId == product.providerId?._id);
+
 
     return (
         <Layout>
@@ -101,17 +99,18 @@ function ProductDetail() {
                     <div className='grid sm:grid-cols-5 grid-cols-2 gap-4 p-6 bg-main  rounded-lg'>
                        
                         {/* cart button  */}
+                        {userId == product.providerId?._id ? " ":
                         <div className='col-span-1 flex-colo border-r border-boarder'>
                             <button onClick={()=>onEditFunction(product)} className='w-10 h-10 flex-colo rounded-lg bg-white bg-opacity-20'>
                                 < BsFillCartPlusFill/>
                             </button>
                         </div>
-                      
+}
                         {/* chat button */}
                         {userId == product.providerId?._id ?
                          <div className='sm:col-span-2 col-span-3 flex justify-end font-medium text-sm '>
-                         <Link to={`/chatwithprovider/${product.providerId?._id}`} className='bg-dry hover:bg-subMain transitions border-2 border-subMain rounded-full flex-rows gap-4 w-full sm:py-3 '>
-                            <BsFillChatLeftDotsFill className='w-3 h-3'/> New Messages
+                         <Link to="/productlists" className='bg-dry hover:bg-subMain transitions border-2 border-subMain rounded-full flex-rows gap-4 w-full sm:py-3 '>
+                            Product Lists
                          </Link>
                        </div> : 
                          <div className='sm:col-span-2 col-span-3 flex justify-end font-medium text-sm '>

@@ -1,12 +1,15 @@
 import React from 'react'
 import ProviderChat from './Chat/ProviderChat'
-import Layout  from '../layout/Layout'
+import NavBar from '../layout/Navbar/NavBar'
+
 
 function Chatwithprovider() {
   return (
-    <Layout>
-        <ProviderChat />
-    </Layout>
+    <>
+      <NavBar />
+      <ProviderChat />
+    </>
+
   )
 }
 
