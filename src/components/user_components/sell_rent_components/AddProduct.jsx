@@ -62,9 +62,13 @@ function AddProduct() {
         if(latitude == 0 || longitude == 0|| productName.trim().length == 0 || price == 0|| description.trim().length == 0 ||images.length ==0){
             toast.error('Please fill all the details')
         }else{
-            console.log('ingatt varind')
+         
             axiosInstance.put('/user/addproduct',{userId,location,latitude,longitude,images,description,productName,price}).then((res)=>{
                 toast.success(res.data.message)
+                setDescription('')
+                setLocation('')
+                setProductName('')
+                setPrice('')
 
             }).catch((err)=>{
                 toast.error(err?.res?.data?.errmsg)
@@ -108,17 +112,18 @@ function AddProduct() {
         <div className='w-full grid md:grid-cols-2 gap-6'>
         <div className="text-sm w-full">
         <label className="text-border font-semibold">Product Name</label>
-        <input required type='text' onChange={(e)=>setProductName(e.target.value)} placeholder="enter product name" className={`w-full text-sm mt-2 p-5 border border-boarder text-white bg-main`}/>
+        <input required type='text' value={productName} onChange={(e)=>setProductName(e.target.value)} placeholder="enter product name" className={`w-full text-sm mt-2 p-5 border border-boarder text-white bg-main`}/>
         </div>
         <div className="text-sm w-full ">
         <label className="text-border font-semibold">Price</label>
-        <input required type='text' onChange={(e)=>setPrice(e.target.value)}  placeholder="Give rent price" className={`w-full text-sm mt-2 p-5 border border-boarder text-white bg-main`}/>
+        <input required type='text' value={price} onChange={(e)=>setPrice(e.target.value)}  placeholder="Give rent price" className={`w-full text-sm mt-2 p-5 border border-boarder text-white bg-main`}/>
         </div>
         </div>
         <div className='w-full grid md:grid-cols-2 gap-6 '>
         <div className="text-sm w-full relative">
         <label className="text-border font-semibold">Product Location</label>
         <input required type='text' 
+         
            onChange={(e) => {
             setSuggetion(true)
             setLocation(e.target.value);
@@ -173,7 +178,7 @@ function AddProduct() {
             {/* Description  */}
             <div className="text-sm w-full">
             <label className="text-border font-semibold">Description</label>
-            <textarea onChange={(e)=>setDescription(e.target.value)} className="w-full bg-main h-40 mt-2 px-4 py-2 border border-border rounded " placeholder='give detail about product'></textarea>
+            <textarea value={description} onChange={(e)=>setDescription(e.target.value)} className="w-full bg-main h-40 mt-2 px-4 py-2 border border-border rounded " placeholder='give detail about product'></textarea>
             </div>
         </div>
         <div className='flex justify-end items-center my-4'>

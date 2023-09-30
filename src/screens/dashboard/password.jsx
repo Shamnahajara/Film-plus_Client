@@ -20,6 +20,10 @@ function Password() {
     }else{
       axiosInstance.patch(`/user/changepassword/${userId}`,{email,newpass,rePass}).then((res)=>{
         toast.success(res.data.message);
+        setEmail('');
+        setNewpass('');
+        setRepass('');
+
       }).catch((err)=>{
         toast.error(err?.res?.data?.errmsg);
       })
@@ -32,18 +36,19 @@ function Password() {
         <h2 className='text-xl font-bold '>Change Password</h2>
         <div className="text-sm w-full">
         <label className="text-border font-semibold">Email</label>
-        <input required type='text' placeholder='' onChange={(e)=>setEmail(e.target.value)} className={`w-full text-sm mt-2 p-5 border border-boarder text-white bg-main`}/>
+        <input required type='text' value={email} placeholder='' onChange={(e)=>setEmail(e.target.value)} className={`w-full text-sm mt-2 p-5 border border-boarder text-white bg-main`}/>
         </div>
         <div className="text-sm w-full">
         <label className="text-border font-semibold">New Password</label>
-        <input required type='password' placeholder='Atleast 8 characters' onChange={(e)=>setNewpass(e.target.value)} className={`w-full text-sm mt-2 p-5 border border-boarder text-white bg-main`}/>
+        <input required type='password' value={newpass} placeholder='Atleast 8 characters' onChange={(e)=>setNewpass(e.target.value)} className={`w-full text-sm mt-2 p-5 border border-boarder text-white bg-main`}/>
         </div>
         <div className="text-sm w-full">
         <label className="text-border font-semibold">Confirm password</label>
-        <input required type='password' placeholder='Re-enter password' onChange={(e)=>setRepass(e.target.value)} className={`w-full text-sm mt-2 p-5 border border-boarder text-white bg-main`}/>
+        <input required type='password' value={rePass} placeholder='Re-enter password' onChange={(e)=>setRepass(e.target.value)} className={`w-full text-sm mt-2 p-5 border border-boarder text-white bg-main`}/>
         </div>
         <div className='justify-end items-center my-4'>
-            <button onClick={handleSubmit} className='bg-subMain font-medium transition hover:bg-main border border-subMain text-white  px-6 py-3 gap-4 rounded-lg w-full sm:w-auto '>
+            <button onClick={handleSubmit}
+               className='bg-subMain font-medium transition hover:bg-main border border-subMain text-white  px-6 py-3 gap-4 rounded-lg w-full sm:w-auto '>
                 Update
             </button>
         </div>

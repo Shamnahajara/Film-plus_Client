@@ -4,7 +4,7 @@ import axiosInstance from '../../api/axios'
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { CiMenuKebab } from 'react-icons/ci'
-import {toast} from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
 
 
 function Chat() {
@@ -12,6 +12,7 @@ function Chat() {
     const [user, setUser] = useState('')
     const [suggUsers, setSuggUsers] = useState([])
     const [chatList, setChatList] = useState([]);
+    const [communitylist, setCommunitylist] = useState([]);
     const [message, setMessage] = useState('')
     const [messages, setMessages] = useState([])
     const [reciever, setReciever] = useState('')
@@ -19,21 +20,26 @@ function Chat() {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [communitypro, setCommunityPro] = useState('')
+    const [chatType, setChatType] = useState('community');
 
+    // ................USER-INFO
     useEffect(() => {
         axiosInstance.get(`/user/userInfo/${userId}`).then((res) => {
             setUser(res.data.user)
         })
     }, [])
 
+    //..................CREATE-ONE-TO-ONE-CHAT
     const createChat = (recieverId) => {
         axiosInstance.post(`/user/createchat/${recieverId}`)
     }
 
+    // .................ACCEPT-REQUST-TO-RECIEVER
     const accept = (chatId) => {
         axiosInstance.patch(`/user/acceptreq/${chatId}`)
     }
 
+    // ..................ADD-MESSAGE-AFTER-ACCEPTED-REQUEST
     const addMessage = async (chatId) => {
         try {
             if (message.trim().length !== 0) {
@@ -48,17 +54,23 @@ function Chat() {
         }
     };
 
-
+    // ........................SELECTED-ONE-TO-ONE-MESSAGE-POPULATE-MESSSAGES
     const accessmessage = async (recieverId) => {
         axiosInstance.get(`/user/accessmessage/${recieverId}`).then((res) => {
-
             setMessages(res.data.messages)
             setReciever(res.data.reciever)
             setChatId(res.data.chatId)
         })
-
     }
 
+    // ....................SELECTED-GROUP-MESSAGE-POPULATE-MESSAGE
+    const accessCommunityMsg = (chatId) => {
+        axiosInstance.get(`/user/accesscommunitymsg/${chatId}`).then((res) => {
+            setMessages(res.data.messages)
+        })
+    }
+
+    // .................CHAT-LIST-OF-USER-ONE-TO-ONE
     useEffect(() => {
         axiosInstance.get(`/user/chatlist/${userId}`).then((res) => {
             setChatList(res.data.results)
@@ -67,7 +79,14 @@ function Chat() {
         })
     }, [userId]);
 
+    //...............COMMUNITY-LIST-OF-USER
+    useEffect(() => {
+        axiosInstance.get('/user/communitylist').then((res) => {
+            setCommunitylist(res.data.communityList)
+        })
+    }, [userId])
 
+    //..................SUGGESTING-SIMILAR-USERS
     useEffect(() => {
         axiosInstance.get(`/user/connectmembers/${userId}`).then((res) => {
             setSuggUsers(res.data.similarUsers);
@@ -97,15 +116,25 @@ function Chat() {
         }
     };
 
+    // .....................CREATING-COMMUNITY
     const createCommunity = () => {
-        if(name.trim().length == 0 || description.trim().length == 0 ){
-              toast.error('please fill all the field')
-        }else{
-            axiosInstance.post(`/user/createcommunity`, {name,description,communitypro}).then((res)=>{
-               toast.success(res?.data?.message)
+        if (name.trim().length == 0 || description.trim().length == 0) {
+            toast.error('please fill all the field')
+        } else {
+            axiosInstance.post(`/user/createcommunity`, { name, description, communitypro }).then((res) => {
+                if (res?.data?.errMsg) {
+                    toast.error(res.data.errMsg)
+                } else {
+                    toast.success(res?.data?.message)
+                }
             })
         }
-        
+    }
+    // ....................JOIN-TO-COMMUNITY
+    const joinCommunity = (chatId) => {
+        axiosInstance.patch(`/user/jointocommunity/${chatId}`).then((res) => {
+            toast.success(res.data.message)
+        })
     }
 
 
@@ -137,28 +166,28 @@ function Chat() {
                             <form method="dialog">
                                 {/* if there is a button in form, it will close the modal */}
                                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                           
-                            <h3 className="font-bold text-lg">Create your own Community</h3>
-                            <p className="py-4">Create a community where people who share your interests, passions, or goals can come together. Your community can be a hub for enthusiasts, professionals, hobbyists, or anyone with a common purpose.</p>
-                            <div className="form-control w-full max-w-xs">
-                                <label className="label">
-                                    <span className="label-text">Community name?</span>
-                                </label>
-                                <input type="text" placeholder="Community name" className="input input-bordered w-full max-w-xs" />
-                                <label className="label">
-                                    <span className="label-text">Tell about community?</span>
-                                </label>
-                                <input type="text" placeholder="Description" className="input input-bordered w-full max-w-xs" />
-                                <label className="label">
-                                    <span className="label-text">Community Profile</span>
-                                </label>
-                                <input type="file"
-                                    name="photo"
-                                    accept=".jpg,.jpeg,.png"
-                                    onChange={handleImageChange}
-                                    className="file-input file-input-bordered w-full max-w-xs" />
-                            </div>
-                            <button onClick={createCommunity} className="btn btn-sm bg-subMain mt-2">Create</button>
+
+                                <h3 className="font-bold text-lg">Create your own Community</h3>
+                                <p className="py-4">Create a community where people who share your interests, passions, or goals can come together. Your community can be a hub for enthusiasts, professionals, hobbyists, or anyone with a common purpose.</p>
+                                <div className="form-control w-full max-w-xs">
+                                    <label className="label">
+                                        <span className="label-text">Community name?</span>
+                                    </label>
+                                    <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Community name" className="input input-bordered w-full max-w-xs" />
+                                    <label className="label">
+                                        <span className="label-text">Tell about community?</span>
+                                    </label>
+                                    <input value={description} onChange={(e) => setDescription(e.target.value)} type="text" placeholder="Description" className="input input-bordered w-full max-w-xs" />
+                                    <label className="label">
+                                        <span className="label-text">Community Profile</span>
+                                    </label>
+                                    <input type="file"
+                                        name="photo"
+                                        accept=".jpg,.jpeg,.png"
+                                        onChange={handleImageChange}
+                                        className="file-input file-input-bordered w-full max-w-xs" />
+                                </div>
+                                <button onClick={createCommunity} className="btn btn-sm bg-subMain mt-2">Create</button>
                             </form>
                         </div>
                     </dialog>
@@ -184,26 +213,67 @@ function Chat() {
                                                 </div>
                                                 <label htmlFor="my-drawer" className="btn btn-sm  hover:bg-gray-100 border mb-1 rounded-full  h-2 w-60 border-subMain hover:border-subMain text-white hover:text-gray-600 bg-subMain drawer-button">suggested</label>
                                                 <label onClick={() => document.getElementById('my_modal_4').showModal()} className="btn btn-sm  hover:bg-gray-100 border mb-1 rounded-full  h-2 w-60 border-white  text-white hover:text-gray-600 bg-blue-600 drawer-button">Add Community+</label>
-
+                                                {/* Add the Community and One-to-One chat buttons here */}
+                                                <div className="flex space-x-2 py-2   border-gray-500">
+                                                    <button
+                                                        onClick={() => setChatType('community')}
+                                                        className={`btn btn-sm hover:bg-gray-100 border mb-1 rounded-full h-2 w-auto ${chatType === 'community' ? 'border-subMain text-white bg-subMain' : 'border-gray-200 text-gray-500'}`}
+                                                    >
+                                                        Communities
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setChatType('one-to-one')}
+                                                        className={`btn btn-sm hover:bg-gray-100 border mb-1 rounded-full h-2 w-32 ${chatType === 'one-to-one' ? 'border-subMain text-white bg-subMain' : 'border-gray-200 text-gray-500'}`}
+                                                    >
+                                                        Chats
+                                                    </button>
+                                                </div>
                                                 {/* search box ends */}
                                                 {/* users */}
                                                 {
                                                     chatList.map((chat, i) => {
                                                         const otherUsers = chat.users.filter(user => user._id !== userId);
                                                         return (
-                                                            <div onClick={() => accessmessage(otherUsers[0]._id)} key={i} className="relative rounded-lg px-2 py-2 flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 bg-gray-200">
+                                                            <div
+                                                                onClick={() => {
+                                                                    if (chat.isGroupChat == true) {
+                                                                        console.log("hreeeee")
+                                                                        setChatId(chat._id)
+                                                                        accessmessage(otherUsers[0]._id);
+                                                                    } else {
+                                                                        accessCommunityMsg(chat._id);
+
+                                                                    }
+
+                                                                }} key={i} className="relative rounded-lg px-2 py-2 flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 bg-gray-200">
                                                                 <div className="flex-shrink-0">
-                                                                    <img src={otherUsers[0]?.profileImage} alt="" className="w-10 h-10 rounded-full" />
+                                                                    {
+                                                                        chat.isGroupchat == true ? <img src={chat?.
+                                                                            groupProfile} alt="" className="w-10 h-10 rounded-full" /> :
+                                                                            <img src={otherUsers[0]?.profileImage} alt="" className="w-10 h-10 rounded-full" />
+                                                                    }
+
                                                                 </div>
                                                                 <div className="flex-1 min-w-0">
-                                                                    <a href="#" className="focus:outline-none">
+                                                                    <a className="focus:outline-none">
                                                                         <div className="flex items-center justify-between">
-                                                                            <p className="text-sm font-bold text-red-600">{otherUsers[0]?.name}</p>
+                                                                            {chat.isGroupchat == true ?
+                                                                                <p className="text-sm font-bold text-red-600">{chat?.chatName}</p> :
+                                                                                <p className="text-sm font-bold text-red-600">{otherUsers[0]?.name}</p>
+                                                                            }
+
                                                                             <div className="text-gray-400 text-xs">{new Date(chat.createdAt).toLocaleDateString()}</div>
                                                                         </div>
                                                                         <div className="flex items-center justify-between">
-                                                                            <p className="text-sm text-gray-500 truncate">{otherUsers[0].email}</p>
-                                                                            {chat.requested.accepted ? "" : <div className="text-white text-xs bg-blue-400 rounded-full px-1 py-0">Requested</div>}
+                                                                            {
+                                                                                chat.isGroupchat == true ? <p className="text-sm text-gray-500 truncate">.....</p> :
+                                                                                    <p className="text-sm text-gray-500 truncate">{otherUsers[0]?.email}</p>
+                                                                            }
+                                                                            {
+                                                                                chat.isGroupchat == true ? "" :
+                                                                                    chat.requested.accepted ? "" : <div className="text-white text-xs bg-blue-400 rounded-full px-1 py-0">Requested</div>
+
+                                                                            }
                                                                         </div>
                                                                     </a>
                                                                 </div>
@@ -409,6 +479,30 @@ function Chat() {
                                             </div>
                                         </div>
                                     ))
+                                }
+                                {
+                                    communitylist.map((list, i) => (
+                                        <div key={i} className='relative rounded-lg px-2 py-2  flex items-start space-x-3 focus-within:ring-2 mb-3 '>
+                                            <div className='flex-shrink-0'>
+                                                <img src={list.groupProfile} alt="" className='w-10 h-10 rounded-full' />
+                                            </div>
+                                            <div className='flex-1 min-w-0'>
+                                                <a href='#' className='focus:outline-none'>
+                                                    <div className='flex items-center justify-between'>
+                                                        <p className='text-sm font-bold text-red-600'>{list.chatName}</p>
+                                                    </div>
+                                                    <div className='flex items-center justify-between'>
+                                                        <p className='text-sm text-gray-500 truncate'>lorumipsum</p>
+                                                        <div className='text-white place-items-center  text-xs w-16 bg-green-400 rounded-full px-1 py-0'>
+                                                            <button className="ml-4" onClick={() => joinCommunity(list._id)}>Join</button>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    )
+
+                                    )
                                 }
                                 {/* user end */}
                             </div>

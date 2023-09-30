@@ -36,11 +36,11 @@ function Banner({popular,addTofav,remove,favorites}) {
                     <Link to={`/movie/${movie._id}`} className='bg-subMain hover:text-main transitions text-white px-8 py-3 rounded font-medium sm:text-sm text-xs '>
                      More
                     </Link>
-                    <button className='bg-white text-subMain transitions px-4 py-3 rounded text-sm bg-opacity-30 '>
+                    <button className='bg-white transitions px-4 py-3 rounded text-sm bg-opacity-30 '>
                     {favorites.some((favMovie) => favMovie._id === movie._id) ? (
-                               <BsHeartFill onClick={() => remove(movie._id)} />
+                               <BsHeartFill className='text-subMain' onClick={() => remove(movie._id)} />
                        ) : (
-                               <BsHeart onClick={() => addTofav(movie._id)} />
+                               <BsHeart className='text-white' onClick={() => addTofav(movie._id)} />
                       )}
                     </button>
                    

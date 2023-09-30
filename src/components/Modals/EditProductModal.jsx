@@ -2,7 +2,6 @@ import MainModal from './MainModal'
 import axios from 'axios';
 import axiosInstance from '../../api/axios';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import {toast} from 'react-hot-toast'
 
 

@@ -68,8 +68,10 @@ function Movies() {
   const [reload,setReload] = useState(FaBullseye)
   const [category, setCategory] = useState({ title: "Category" });
   const [rates, setRates] = useState(RateData[0]);
-  const [initialLoad, setInitialLoad] = useState(false); 
+  const [initialLoad, setInitialLoad] = useState(false);
+  const [favorites,setFavorites] = useState([]) 
   const {userId} = useSelector((state)=>state.User)
+
 
   const Filter = [
     {
@@ -83,6 +85,16 @@ function Movies() {
       items: RateData,
     },
   ];
+  // ...........................................get favorites of users..................................................
+useEffect(() => {
+  axiosInstance.get(`/user/getfavorites/${userId}`
+).then((res)=>{
+   console.log('res.data',res.data.favoriteMovies)
+   setFavorites(res.data.favoriteMovies)
+}) .catch((error) => {
+  console.error('Error fetching favorite movies:', error);
+});
+}, [userId,reload]);
 
   // ............................................Add to favorites...........................................................
   const addTofav = async (movieId)=>{
@@ -234,7 +246,7 @@ if(err?.response?.data?.errmsg){
         </p>
         <div className='grid sm:mt-10 mt-6 xl:grid-cols-5 lg:grid-cols-3 sm:grid-cols-2 gap-6'>
           {movies.slice(0, page).map((movie, index) => (
-            <Movie remove={remove}  addTofav={ addTofav} key={index} movie={movie} />
+            <Movie remove={remove} favorites={favorites}  addTofav={ addTofav} key={index} movie={movie} />
           ))}
         </div>
         {/* loading more */}

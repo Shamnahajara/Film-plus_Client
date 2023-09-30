@@ -19,7 +19,7 @@ const Rows = (movie,i,remove)=>{
             <td className={`${text} truncate`}>{movie.title}</td>
             <td className={`${text}`}>{movie.original_language}</td>
             <td className={`${text}`}>{ new Date(movie.release_date).toLocaleDateString()}</td>
-            <td className={`${text} float-right flex-rows gap-2`}>
+            <td className={`'text-sm text-left leading-6 whitespace-nowrap px-5 py-3' float-right flex-rows gap-2`}>
                 <Link to={`/Movie/${movie._id}`} className='bg-boarder flex-rows gap-2 text-white  rounded flex-colo w-7 h-7'> <GoEye /> </Link>
                 <button onClick={()=>remove(movie._id)} className='bg-subMain flex-rows gap-2 text-white  rounded flex-colo w-7 h-7'>
                    <MdDelete/>

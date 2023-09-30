@@ -17,6 +17,7 @@ function RentFormModal({modalOpen, setModalOpen,Product}) {
     const [location ,setLocation] = useState('')
     const [rentFrom, setRentFrom] = useState('')
     const [rentTo, setRentTo] = useState('')
+    const [idProof,setIdproof] = useState('')
     const {userId} = useSelector((state)=>state.User)
 
 
@@ -25,7 +26,7 @@ function RentFormModal({modalOpen, setModalOpen,Product}) {
         if (new Date() >= new Date(rentFrom) || rentFrom == rentTo || new Date() >= new Date(rentTo) || rentFrom == undefined || rentTo == undefined) {
           toast.error("Enter correct dates")
         } else {
-          axiosInstance.post('/user/create-checkout-session', {userId, productId, rentFrom, rentTo,location }).then((res) => {
+          axiosInstance.post('/user/create-checkout-session', {userId, productId, rentFrom, rentTo,location,idProof }).then((res) => {
             if (res.data.url) {
               window.location.href = res.data.url
             }
@@ -36,6 +37,27 @@ function RentFormModal({modalOpen, setModalOpen,Product}) {
           })
         }
       }
+
+      function isValidImage(logo) {
+        const validExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
+        const extension = logo.substr(logo.lastIndexOf('.')).toLowerCase();
+        return validExtensions.includes(extension);
+    }
+
+    const handleImageChange = (img) => {
+        if (isValidImage(img.target.files[0].name)) {
+            let reader = new FileReader()
+            reader.readAsDataURL(img.target.files[0])
+            reader.onload = () => {
+                setIdproof(reader.result)
+            }
+            reader.onerror = (err) => {
+                console.log(err);
+            }
+        } else {
+            toast.error('Add valid image')
+        }
+    };
 
 
     // Function to get location suggestions from Mapbox Geocoding API
@@ -118,6 +140,14 @@ function RentFormModal({modalOpen, setModalOpen,Product}) {
                                 </li>
                             ))}
                         </ul>
+
+                        <div className="form-control w-full max-w-xs">
+  <label className="label mt-2">
+    <span className="label-text  text-white font-semibold">upload any id proof</span>
+  </label>
+  <input type="file" accept=".jpg,.jpeg,.png" id="file" onChange={handleImageChange} className="file-input file-input-bordered w-full max-w-xs" />
+  
+</div>
         </div>
         
         </div>

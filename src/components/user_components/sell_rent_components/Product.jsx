@@ -17,11 +17,11 @@ function Product({products,onEditFunction}) {
           <h3 className='font-semibold truncate'>{product.productName}</h3>
           {
               product.isRented  ? 
-                  <button  className="w-12 h-12 flex-colo transitions hover:bg-subMain rounded-full bg-white bg-opacity-30 text-white">
+                  <button  className="w-14 h-12 flex-colo transitions hover:bg-subMain hover:text-subMain rounded-md bg-white bg-opacity-30 text-yellow-400">
                     Booked
                   </button>:
-                   <button onClick={()=>onEditFunction(product)} className="w-12 h-12 flex-colo transitions hover:bg-subMain rounded-full bg-white bg-opacity-30 text-white">
-                    <BsFillCartPlusFill />
+                   <button onClick={()=>onEditFunction(product)} className="w-14 h-12 flex-colo  rounded-md transitions hover:bg-subMain hover:text-white text-yellow-400  bg-white bg-opacity-30">
+                    Rent $
                   </button>
                   }
         </div>
