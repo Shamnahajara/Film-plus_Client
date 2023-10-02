@@ -61,7 +61,7 @@ function UsersList() {
       <Toaster toastOptions={3000} />
       <div className='flex flex-col gap-6'>
         <div className='flex-btn gap-2'>
-          <h2 className='text-xl font-bold'>Users list</h2>         
+          <h2 className='text-xl font-bold'>Community List</h2>         
         </div>
         {/* user table */}
         <UserTable users={users} statusChange={statusChange} />

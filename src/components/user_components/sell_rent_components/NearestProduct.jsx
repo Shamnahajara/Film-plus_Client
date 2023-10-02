@@ -147,7 +147,7 @@ function  NearestProduct({products,onEditFunction}) {
            <br></br>
 
 
-  <div className='may-16'>
+  <div className='my-16'>
     <Titles title='Nearest Product' Icon={HiLocationMarker}/>
     <div className='mt-10'>
         <Swiper 

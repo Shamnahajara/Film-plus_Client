@@ -12,6 +12,7 @@ function Chat() {
     const [user, setUser] = useState('')
     const [suggUsers, setSuggUsers] = useState([])
     const [chatList, setChatList] = useState([]);
+    const [grpChat,setgrpChat] = useState([])
     const [communitylist, setCommunitylist] = useState([]);
     const [message, setMessage] = useState('')
     const [messages, setMessages] = useState([])
@@ -69,11 +70,15 @@ function Chat() {
             setMessages(res.data.messages)
         })
     }
+    console.log("messages",messages)
 
     // .................CHAT-LIST-OF-USER-ONE-TO-ONE
     useEffect(() => {
         axiosInstance.get(`/user/chatlist/${userId}`).then((res) => {
-            setChatList(res.data.results)
+            setChatList(res.data.oneOnOneChats)
+            setgrpChat(res.data.groupChats)
+
+
         }).catch((err) => {
             console.error("chatlist error", err)
         })
@@ -143,6 +148,7 @@ function Chat() {
             <div className="drawer">
                 <input id="my-drawer" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content">
+                    {/* dialog for user profile */}
                     <dialog id="my_modal_3" className='modal' >
                         <div className=" modal-box  w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-main dark:border-gray-700">
                             <form method="dialog">
@@ -160,7 +166,7 @@ function Chat() {
                             </div>
                         </div>
                     </dialog>
-
+                    {/* dialog for add community  */}
                     <dialog id="my_modal_4" className="modal">
                         <div className="modal-box bg-main">
                             <form method="dialog">
@@ -216,13 +222,18 @@ function Chat() {
                                                 {/* Add the Community and One-to-One chat buttons here */}
                                                 <div className="flex space-x-2 py-2   border-gray-500">
                                                     <button
-                                                        onClick={() => setChatType('community')}
+                                                        onClick={() =>{
+                                                            setChatType('community')
+                                                        } }
                                                         className={`btn btn-sm hover:bg-gray-100 border mb-1 rounded-full h-2 w-auto ${chatType === 'community' ? 'border-subMain text-white bg-subMain' : 'border-gray-200 text-gray-500'}`}
                                                     >
                                                         Communities
                                                     </button>
                                                     <button
-                                                        onClick={() => setChatType('one-to-one')}
+                                                        onClick={() =>{
+                                                            setChatType('one-to-one')
+
+                                                        } }
                                                         className={`btn btn-sm hover:bg-gray-100 border mb-1 rounded-full h-2 w-32 ${chatType === 'one-to-one' ? 'border-subMain text-white bg-subMain' : 'border-gray-200 text-gray-500'}`}
                                                     >
                                                         Chats
@@ -230,49 +241,29 @@ function Chat() {
                                                 </div>
                                                 {/* search box ends */}
                                                 {/* users */}
-                                                {
+                                                { 
+                                                    chatType == 'one-to-one' ? 
                                                     chatList.map((chat, i) => {
                                                         const otherUsers = chat.users.filter(user => user._id !== userId);
                                                         return (
                                                             <div
                                                                 onClick={() => {
-                                                                    if (chat.isGroupChat == true) {
-                                                                        console.log("hreeeee")
                                                                         setChatId(chat._id)
                                                                         accessmessage(otherUsers[0]._id);
-                                                                    } else {
-                                                                        accessCommunityMsg(chat._id);
-
-                                                                    }
-
                                                                 }} key={i} className="relative rounded-lg px-2 py-2 flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 bg-gray-200">
                                                                 <div className="flex-shrink-0">
-                                                                    {
-                                                                        chat.isGroupchat == true ? <img src={chat?.
-                                                                            groupProfile} alt="" className="w-10 h-10 rounded-full" /> :
                                                                             <img src={otherUsers[0]?.profileImage} alt="" className="w-10 h-10 rounded-full" />
-                                                                    }
-
                                                                 </div>
                                                                 <div className="flex-1 min-w-0">
                                                                     <a className="focus:outline-none">
                                                                         <div className="flex items-center justify-between">
-                                                                            {chat.isGroupchat == true ?
-                                                                                <p className="text-sm font-bold text-red-600">{chat?.chatName}</p> :
                                                                                 <p className="text-sm font-bold text-red-600">{otherUsers[0]?.name}</p>
-                                                                            }
-
                                                                             <div className="text-gray-400 text-xs">{new Date(chat.createdAt).toLocaleDateString()}</div>
                                                                         </div>
                                                                         <div className="flex items-center justify-between">
-                                                                            {
-                                                                                chat.isGroupchat == true ? <p className="text-sm text-gray-500 truncate">.....</p> :
                                                                                     <p className="text-sm text-gray-500 truncate">{otherUsers[0]?.email}</p>
-                                                                            }
                                                                             {
-                                                                                chat.isGroupchat == true ? "" :
                                                                                     chat.requested.accepted ? "" : <div className="text-white text-xs bg-blue-400 rounded-full px-1 py-0">Requested</div>
-
                                                                             }
                                                                         </div>
                                                                     </a>
@@ -280,6 +271,32 @@ function Chat() {
                                                             </div>
                                                         );
                                                     })
+                                                    :
+                                                    grpChat.map((chat, i) => {
+                                                        return (
+                                                            <div
+                                                                onClick={() => {
+                                                                        setChatId(chat._id);
+                                                                        accessCommunityMsg(chat._id);
+                                                                }} key={i} className="relative rounded-lg px-2 py-2 flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 bg-gray-200">
+                                                                <div className="flex-shrink-0">
+                                                                    <img src={chat?.groupProfile} alt="" className="w-10 h-10 rounded-full" /> 
+                                                                </div>
+                                                                <div className="flex-1 min-w-0">
+                                                                    <a className="focus:outline-none">
+                                                                        <div className="flex items-center justify-between">
+                                                                                <p className="text-sm font-bold text-red-600">{chat?.chatName}</p> 
+                                                                            <div className="text-gray-400 text-xs">{new Date(chat.createdAt).toLocaleDateString()}</div>
+                                                                        </div>
+                                                                        <div className="flex items-center justify-between">
+                                                                            <p className="text-sm text-gray-500 truncate">.....</p> 
+                                                                        </div>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })
+
                                                 }
                                                 {/* user end */}
                                             </div>
@@ -295,7 +312,7 @@ function Chat() {
                                                 </div>
                                                 {/* Other chat UI elements */}
                                             </div>
-                                            : chatId.requested.accepted == false ? <div className='flex-1 p-2 sm:pb-6 justify-between flex flex-col h-screen xl:flex'>
+                                            : chatId?.requested?.accepted == false ? <div className='flex-1 p-2 sm:pb-6 justify-between flex flex-col h-screen xl:flex'>
                                                 {/* Other chat UI elements */}
                                                 <div className='flex sm:items-center justify-between border-b border-gray-200 py-3'>
                                                     <div className='flex items-center space-x-4'>
@@ -307,7 +324,8 @@ function Chat() {
                                                                         <svg width={10} height={10}>
                                                                             <circle cx={5} cy={5} r={5} fill='currentColor' />
                                                                         </svg>
-                                                                    </span> */}
+                                                                    </span> 
+                                                                    */}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -318,7 +336,7 @@ function Chat() {
                                                     </div>
                                                 </div>
                                                 {
-                                                    chatId.requested.requestId == userId ?
+                                                    chatId?.requested?.requestId == userId ?
                                                         <div className="flex justify-center items-center h-full">
                                                             <div id="toast-interactive" className="w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow dark:bg-gray-800 dark:text-gray-400" role="alert">
                                                                 <div className="flex">
@@ -360,9 +378,7 @@ function Chat() {
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                 }
-
                                                 {/* Other chat UI elements */}
                                             </div> :
                                                 <div className=' flex-1 p-2 sm:pb-6 justify-between flex flex-col h-screen xl:flex'>
@@ -435,7 +451,7 @@ function Chat() {
                                                                     <AiOutlinePaperClip className='h-6 w-6' />
                                                                 </button>
                                                             </span>
-                                                            <input onChange={(e) => setMessage(e.target.value)} placeholder='type here' type="text" className='border focus:ring-red-500 focus:border-red-500 w-full focus:placeholder-gray-400 text-gray-600 placeholder-gray-400 pl-12 bg-gray-100 rounded-full py-3 border-gray-200' />
+                                                            <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder='type here' type="text" className='border focus:ring-red-500 focus:border-red-500 w-full focus:placeholder-gray-400 text-gray-600 placeholder-gray-400 pl-12 bg-gray-100 rounded-full py-3 border-gray-200' />
                                                             <button
                                                                 onClick={() => addMessage(chatId._id)}
                                                                 className=' ml-1 inline-flex items-center justify-center rounded-full h-12 w-12 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300'>
@@ -458,6 +474,7 @@ function Chat() {
                                 <label htmlFor="my-drawer" className="btn btn-sm  hover:bg-gray-100 border mb-1 rounded-full  h-2 w-60 border-subMain hover:border-subMain text-white hover:text-gray-600 bg-subMain drawer-button">suggested</label>
                                 <p className='pl-2'>Film-plus suggests users who have similar interests to you </p>
                                 <br></br>
+                                
                                 {/* users */}
                                 {
                                     suggUsers.map((user, i) => (
@@ -480,6 +497,8 @@ function Chat() {
                                         </div>
                                     ))
                                 }
+                                <br></br>
+                                <p className='pl-2 text-primary'>Communities</p>
                                 {
                                     communitylist.map((list, i) => (
                                         <div key={i} className='relative rounded-lg px-2 py-2  flex items-start space-x-3 focus-within:ring-2 mb-3 '>

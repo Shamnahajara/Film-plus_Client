@@ -8,6 +8,7 @@ import Login from '../screens/Admin/Login';
 import Users from '../screens/Admin/UsersList'
 import Movies from '../screens/Admin/MovieLists'
 import ProductList from '../screens/Admin/ProductList'
+import CommunityList from "../screens/Admin/CommunityList";
 
 function Admin_route() {
 
@@ -19,6 +20,7 @@ function Admin_route() {
         <Route path="/users" element={admin.token !== null?<Users/> :<Navigate to={'/admin/login'}/>}/>
         <Route path="/movieslists" element={admin.token !== null ? <Movies/> : <Navigate to={'/admin/login'}/>} />
         <Route path='/rentProducts' element={admin.token !== null ? <ProductList/>:<Navigate to={'/admin/login'}/>} />
+        <Route path='/communities' element={admin.token !== null ? <CommunityList/> : <Navigate to={'/admin/login'}/>}/>
     </Routes>
   )
 }

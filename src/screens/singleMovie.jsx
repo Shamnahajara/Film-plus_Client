@@ -36,8 +36,8 @@ function SingleMovie() {
                 setMovie(res.data.movie)
             })
     }, [id])
-    // ...................................average rating of a movie.....................................................
 
+    // ...................................average rating of a movie.....................................................
     const [averageRating, setAverageRating] = useState(null);
     useEffect(() => {
         axiosInstance.get(`/user/averagerating/${id}`)
@@ -74,7 +74,8 @@ function SingleMovie() {
             .catch(error => {
                 console.error('Error fetching cast details:', error);
             });
-    }, [id]);
+    }, [id]); 
+    console.log (casts);
 
 
     // /...........................................movie reviews added by users.............................................
@@ -105,8 +106,6 @@ function SingleMovie() {
     }
 
     // ..............................................EDIT-REVIEWS............................................................
-
-
     const editReviews = (reviewId) => {
         axiosInstance.patch(`/user/editreview/${reviewId}`, { editRate, editReview }).then((res) => {
             toast.success(res.data.message)
@@ -118,7 +117,7 @@ function SingleMovie() {
 
 // .................................................DELETE-REVIEW....................................................................
 const deleteReview = (reviewId)=>{
-    axiosInstance.delete(`/user/deletereview/${reviewId}`).then((res)=>{
+    axiosInstance.patch(`/user/deletereview/${reviewId}`).then((res)=>{
         toast.success(res.data.message)
         setReload(!reload)
     }).catch((err) => {

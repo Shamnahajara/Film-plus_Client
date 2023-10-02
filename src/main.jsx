@@ -11,8 +11,6 @@ import {Provider} from 'react-redux';
 import {Store,persistor} from './store/store'
 import {PersistGate} from 'redux-persist/integration/react'
 import {ThemeProvider} from '@material-tailwind/react'
-// import { ChakraProvider } from '@chakra-ui/react'
-// import ChatProvider from '../src/Context/ChatProvider'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

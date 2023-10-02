@@ -32,6 +32,9 @@ import PaymentFail from './components/PaymentFail'
 import Community from './screens/Community'
 import Chatwithprovider from './screens/Chatwithprovider'
 import CommunityChat from './screens/CommunityChat'
+import UserReviews from './screens/UserReviews'
+import CastDetails from './screens/CastDetails'
+import Example from './screens/Example'
 
 
 function App() {
@@ -55,6 +58,11 @@ function App() {
         <Route path='/password' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<Password/>:<Navigate to='/login'/>} />
         <Route path='/favorites' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token!== null ? <FavoriteMovies/>:<Navigate to='/login'/>} />
         <Route path='/movieslists' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<MoviesLists/>:<Navigate to='/login'/>} />
+        <Route path='/userreviewlist' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<UserReviews/>:<Navigate to='/login'/>} />
+        <Route path='/castdetails' element={<CastDetails/>}/>
+        <Route path='/example' element={<Example/>} />
+
+
         <Route path='/dasboard' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<Dashboard/>:<Navigate to='/login'/>} />
         <Route path='/renthistory' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<RentHistory />:<Navigate to='/login'/>} />
         <Route path='/users' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<Users/>:<Navigate to='/login'/>} />
