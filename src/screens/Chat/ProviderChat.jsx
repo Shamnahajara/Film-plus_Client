@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import axiosInstance from '../../api/axios'
 import io from "socket.io-client"
 import { useParams } from 'react-router-dom'
-const END_POINT = "http://localhost:3000"
+const END_POINT = "https://api.filmplus.website"
 let socket;
 
 function ProviderChat() {
