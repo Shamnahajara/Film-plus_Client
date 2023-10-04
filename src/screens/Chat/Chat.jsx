@@ -12,7 +12,7 @@ function Chat() {
     const [user, setUser] = useState('')
     const [suggUsers, setSuggUsers] = useState([])
     const [chatList, setChatList] = useState([]);
-    const [grpChat,setgrpChat] = useState([])
+    const [grpChat, setgrpChat] = useState([])
     const [communitylist, setCommunitylist] = useState([]);
     const [message, setMessage] = useState('')
     const [messages, setMessages] = useState([])
@@ -25,7 +25,7 @@ function Chat() {
 
     // ................USER-INFO
     useEffect(() => {
-        axiosInstance.get(`/user/userInfo/${userId}`).then((res) => {
+        axiosInstance.get(`/user/userInfo`).then((res) => {
             setUser(res.data.user)
         })
     }, [])
@@ -59,30 +59,40 @@ function Chat() {
     const accessmessage = async (recieverId) => {
         axiosInstance.get(`/user/accessmessage/${recieverId}`).then((res) => {
             setMessages(res.data.messages)
+            console.log("res.data",res.data.messages)
             setReciever(res.data.reciever)
             setChatId(res.data.chatId)
         })
     }
+    console.log("reciever",reciever)
+
 
     // ....................SELECTED-GROUP-MESSAGE-POPULATE-MESSAGE
     const accessCommunityMsg = (chatId) => {
+        console.log("this function")
+    
         axiosInstance.get(`/user/accesscommunitymsg/${chatId}`).then((res) => {
+            setChatId(res.data.chatId)
             setMessages(res.data.messages)
+
         })
     }
-    console.log("messages",messages)
+    console.log("messages", messages)
 
     // .................CHAT-LIST-OF-USER-ONE-TO-ONE
     useEffect(() => {
         axiosInstance.get(`/user/chatlist/${userId}`).then((res) => {
             setChatList(res.data.oneOnOneChats)
             setgrpChat(res.data.groupChats)
+            console.log(res.data.oneOnOneChats)
+            console.log(res.data.groupChats)
 
 
         }).catch((err) => {
             console.error("chatlist error", err)
         })
     }, [userId]);
+
 
     //...............COMMUNITY-LIST-OF-USER
     useEffect(() => {
@@ -187,10 +197,7 @@ function Chat() {
                                     <label className="label">
                                         <span className="label-text">Community Profile</span>
                                     </label>
-                                    <input type="file"
-                                        name="photo"
-                                        accept=".jpg,.jpeg,.png"
-                                        onChange={handleImageChange}
+                                    <input type="file" name="photo" accept=".jpg,.jpeg,.png" id="file" onChange={handleImageChange} 
                                         className="file-input file-input-bordered w-full max-w-xs" />
                                 </div>
                                 <button onClick={createCommunity} className="btn btn-sm bg-subMain mt-2">Create</button>
@@ -222,18 +229,18 @@ function Chat() {
                                                 {/* Add the Community and One-to-One chat buttons here */}
                                                 <div className="flex space-x-2 py-2   border-gray-500">
                                                     <button
-                                                        onClick={() =>{
+                                                        onClick={() => {
                                                             setChatType('community')
-                                                        } }
+                                                        }}
                                                         className={`btn btn-sm hover:bg-gray-100 border mb-1 rounded-full h-2 w-auto ${chatType === 'community' ? 'border-subMain text-white bg-subMain' : 'border-gray-200 text-gray-500'}`}
                                                     >
                                                         Communities
                                                     </button>
                                                     <button
-                                                        onClick={() =>{
+                                                        onClick={() => {
                                                             setChatType('one-to-one')
 
-                                                        } }
+                                                        }}
                                                         className={`btn btn-sm hover:bg-gray-100 border mb-1 rounded-full h-2 w-32 ${chatType === 'one-to-one' ? 'border-subMain text-white bg-subMain' : 'border-gray-200 text-gray-500'}`}
                                                     >
                                                         Chats
@@ -241,61 +248,60 @@ function Chat() {
                                                 </div>
                                                 {/* search box ends */}
                                                 {/* users */}
-                                                { 
-                                                    chatType == 'one-to-one' ? 
-                                                    chatList.map((chat, i) => {
-                                                        const otherUsers = chat.users.filter(user => user._id !== userId);
-                                                        return (
-                                                            <div
-                                                                onClick={() => {
-                                                                        setChatId(chat._id)
+                                                {
+                                                    chatType == 'one-to-one' ?
+                                                        chatList.map((chat, i) => {
+                                                            const otherUsers = chat.users.filter(user => user._id !== userId);
+                                                            return (
+                                                                <div
+                                                                    onClick={() => {
                                                                         accessmessage(otherUsers[0]._id);
-                                                                }} key={i} className="relative rounded-lg px-2 py-2 flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 bg-gray-200">
-                                                                <div className="flex-shrink-0">
-                                                                            <img src={otherUsers[0]?.profileImage} alt="" className="w-10 h-10 rounded-full" />
-                                                                </div>
-                                                                <div className="flex-1 min-w-0">
-                                                                    <a className="focus:outline-none">
-                                                                        <div className="flex items-center justify-between">
+                                                                    }} key={i} className="relative rounded-lg px-2 py-2 flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 bg-gray-200">
+                                                                    <div className="flex-shrink-0">
+                                                                        <img src={otherUsers[0]?.profileImage} alt="" className="w-10 h-10 rounded-full" />
+                                                                    </div>
+                                                                    <div className="flex-1 min-w-0">
+                                                                        <a className="focus:outline-none">
+                                                                            <div className="flex items-center justify-between">
                                                                                 <p className="text-sm font-bold text-red-600">{otherUsers[0]?.name}</p>
-                                                                            <div className="text-gray-400 text-xs">{new Date(chat.createdAt).toLocaleDateString()}</div>
-                                                                        </div>
-                                                                        <div className="flex items-center justify-between">
-                                                                                    <p className="text-sm text-gray-500 truncate">{otherUsers[0]?.email}</p>
-                                                                            {
+                                                                                <div className="text-gray-400 text-xs">{new Date(chat.createdAt).toLocaleDateString()}</div>
+                                                                            </div>
+                                                                            <div className="flex items-center justify-between">
+                                                                                <p className="text-sm text-gray-500 truncate">{chat.latestMessage.message}</p>
+                                                                                {
                                                                                     chat.requested.accepted ? "" : <div className="text-white text-xs bg-blue-400 rounded-full px-1 py-0">Requested</div>
-                                                                            }
-                                                                        </div>
-                                                                    </a>
+                                                                                }
+                                                                            </div>
+                                                                        </a>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        );
-                                                    })
-                                                    :
-                                                    grpChat.map((chat, i) => {
-                                                        return (
-                                                            <div
-                                                                onClick={() => {
-                                                                        setChatId(chat._id);
+                                                            );
+                                                        })
+                                                        :
+                                                        grpChat.map((chat, i) => {
+                                                            return (
+                                                                <div
+                                                                    key={i}
+                                                                    onClick={() => {
                                                                         accessCommunityMsg(chat._id);
-                                                                }} key={i} className="relative rounded-lg px-2 py-2 flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 bg-gray-200">
-                                                                <div className="flex-shrink-0">
-                                                                    <img src={chat?.groupProfile} alt="" className="w-10 h-10 rounded-full" /> 
+                                                                    }} className="relative rounded-lg px-2 py-2 flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 bg-gray-200">
+                                                                    <div className="flex-shrink-0">
+                                                                        <img src={chat?.groupProfile} alt="" className="w-10 h-10 rounded-full" />
+                                                                    </div>
+                                                                    <div className="flex-1 min-w-0">
+                                                                        <a className="focus:outline-none">
+                                                                            <div className="flex items-center justify-between">
+                                                                                <p className="text-sm font-bold text-red-600">{chat?.chatName}</p>
+                                                                                <div className="text-gray-400 text-xs">{new Date(chat.createdAt).toLocaleDateString()}</div>
+                                                                            </div>
+                                                                            <div className="flex items-center justify-between">
+                                                                                <p className="text-sm text-gray-500 truncate">{chat.latestMessage.message}</p>
+                                                                            </div>
+                                                                        </a>
+                                                                    </div>
                                                                 </div>
-                                                                <div className="flex-1 min-w-0">
-                                                                    <a className="focus:outline-none">
-                                                                        <div className="flex items-center justify-between">
-                                                                                <p className="text-sm font-bold text-red-600">{chat?.chatName}</p> 
-                                                                            <div className="text-gray-400 text-xs">{new Date(chat.createdAt).toLocaleDateString()}</div>
-                                                                        </div>
-                                                                        <div className="flex items-center justify-between">
-                                                                            <p className="text-sm text-gray-500 truncate">.....</p> 
-                                                                        </div>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        );
-                                                    })
+                                                            );
+                                                        })
 
                                                 }
                                                 {/* user end */}
@@ -316,7 +322,14 @@ function Chat() {
                                                 {/* Other chat UI elements */}
                                                 <div className='flex sm:items-center justify-between border-b border-gray-200 py-3'>
                                                     <div className='flex items-center space-x-4'>
-                                                        <img src={reciever?.profileImage} alt='' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full border-none cursor-pointer' />
+                                                        {
+                                                            chatId?.isGroupchat == true ?
+                                                            
+                                                              <img src={chatId?.groupProfile} alt='group profile' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full border-none cursor-pointer' />
+                                                                :
+                                                              <img src={reciever?.profileImage} alt='user profile' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full border-none cursor-pointer' />
+
+                                                        }
                                                         <div className='flex flex-col leading-tight'>
                                                             <div className='text-xl mt-1 flex items-center'>
                                                                 <span className='text-gray-700 mr-3'>{reciever?.name}</span>
@@ -384,7 +397,14 @@ function Chat() {
                                                 <div className=' flex-1 p-2 sm:pb-6 justify-between flex flex-col h-screen xl:flex'>
                                                     <div className='flex sm:items-center justify-between border-b border-gray-200 py-3'>
                                                         <div className='flex items-center space-x-4'>
-                                                            <img src={reciever?.profileImage} alt='' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full cursor-pointer' />
+                                                        {
+                                                            chatId?.isGroupchat == true ?
+                                                            
+                                                              <img src={chatId?.groupProfile} alt='group profile' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full border-none cursor-pointer' />
+                                                                :
+                                                              <img src={reciever?.profileImage} alt='user profile' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full border-none cursor-pointer' />
+
+                                                        }
                                                             <div className='flex flex-col leading-tight'>
                                                                 <div className='text-xl mt-1 flex items-center'>
                                                                     <span className='text-gray-700 mr-3'>{reciever?.name}</span>
@@ -407,11 +427,12 @@ function Chat() {
                                                                         <p className="text-gray-500">Start sending messages</p>
                                                                     </div>
                                                                 ) : (
+
                                                                     <div>
                                                                         {messages.map((message, i) => (
                                                                             <div key={i} className='chat-message'>
-                                                                                {message.sender === userId ? (
-                                                                                    <div className='flex items-end justify-end'>
+                                                                                {message.sender._id === userId ? (
+                                                                                    <div className='flex items-end justify-end mb-1'>
                                                                                         <div className='flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end'>
                                                                                             <div>
                                                                                                 <span className='px-4 py-2 rounded-lg inline-block rounded-bl-none bg-red-500 text-white'>
@@ -422,7 +443,7 @@ function Chat() {
                                                                                         <img src={user?.profileImage} alt="" className='w-6 h-6 rounded-full order-2' />
                                                                                     </div>
                                                                                 ) : (
-                                                                                    <div className='flex items-end'>
+                                                                                    <div className='flex items-end mb-1'>
                                                                                         <div className='flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start'>
                                                                                             <div>
                                                                                                 <span className='px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-200 text-gray-600'>
@@ -430,7 +451,7 @@ function Chat() {
                                                                                                 </span>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <img src={reciever?.profileImage} alt="" className='w-6 h-6 rounded-full order-1' />
+                                                                                        <img src={message?.sender?.profileImage} alt="profile" className='w-6 h-6 rounded-full order-1' />
                                                                                     </div>
                                                                                 )}
                                                                             </div>
@@ -462,6 +483,45 @@ function Chat() {
                                                 </div>
                                     }
                                 </div>
+                                {/* <div className='bg-gray-50 pr-4 sm:pr-6 lg:pr-8 lg:flex-shrink-0 lg:border-l lg:border-gray-200 xl:pr-0 hidden xl:block'>
+                                    <div className='h-full py-6 pl-6 lg:w-80 '>
+                                        <div className='h-full relative'>
+                                            <div className='m-auto text-center mb-10'>
+                                                <img className='w-36 h-36 rounded-full m-auto' src={profile} alt="" />
+                                                <h2 className='m-auto text-black text-2xl mt-2'>Kina Nayer</h2>
+                                            </div>
+                                            <div className='mb-2'>
+                                                <h2 className='text-black'>Attachments</h2>
+                                            </div>
+                                            <div className='grid grid-cols-4 gap-2'>
+                                                <div>
+                                                    <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
+                                                </div>
+                                                <div>
+                                                    <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
+                                                </div>
+                                                <div>
+                                                    <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
+                                                </div>
+                                                <div>
+                                                    <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
+                                                </div>
+                                                <div>
+                                                    <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
+                                                </div>
+                                                <div>
+                                                    <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
+                                                </div>
+                                                <div>
+                                                    <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
+                                                </div>
+                                                <div>
+                                                    <div className='cursor-pointer bg-gray-300 hover:bg-gray-400 h-14  w-full'></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -474,7 +534,7 @@ function Chat() {
                                 <label htmlFor="my-drawer" className="btn btn-sm  hover:bg-gray-100 border mb-1 rounded-full  h-2 w-60 border-subMain hover:border-subMain text-white hover:text-gray-600 bg-subMain drawer-button">suggested</label>
                                 <p className='pl-2'>Film-plus suggests users who have similar interests to you </p>
                                 <br></br>
-                                
+
                                 {/* users */}
                                 {
                                     suggUsers.map((user, i) => (
@@ -511,7 +571,7 @@ function Chat() {
                                                         <p className='text-sm font-bold text-red-600'>{list.chatName}</p>
                                                     </div>
                                                     <div className='flex items-center justify-between'>
-                                                        <p className='text-sm text-gray-500 truncate'>lorumipsum</p>
+                                                        <p className='text-sm text-gray-500 truncate'>{list?.latestMessage?.message}</p>
                                                         <div className='text-white place-items-center  text-xs w-16 bg-green-400 rounded-full px-1 py-0'>
                                                             <button className="ml-4" onClick={() => joinCommunity(list._id)}>Join</button>
                                                         </div>

@@ -44,7 +44,7 @@ function ProviderChat() {
 
     // ...USER-INFO
     useEffect(() => {
-        axiosInstance.get(`/user/userInfo/${userId}`).then((res) => {
+        axiosInstance.get(`/user/userInfo`).then((res) => {
             setUser(res.data.user)
         }).catch((err) => {
             console.err("failed to fetch all users", err)
@@ -249,7 +249,7 @@ function ProviderChat() {
                                         <div>
                                             {messages.map((message, i) => (
                                                 <div key={i} className='chat-message'>
-                                                    {message.sender === userId ? (
+                                                    {message.sender._id === userId ? (
                                                         <div className='flex items-end justify-end'>
                                                             <div className='flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end'>
                                                                 <div>
@@ -269,7 +269,7 @@ function ProviderChat() {
                                                                     </span>
                                                                 </div>
                                                             </div>
-                                                            <img src={provider?.profileImage} alt="" className='w-6 h-6 rounded-full order-1' />
+                                                            <img src={message?.sender?.profileImage} alt="" className='w-6 h-6 rounded-full order-1' />
                                                         </div>
                                                     )}
                                                 </div>

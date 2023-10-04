@@ -83,7 +83,9 @@ function App() {
 
        {/* Community page routes */}
        <Route path='/communities' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<Community/>:<Navigate to='/login'/>} />    
-       <Route path='/communityChat' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<CommunityChat/>:<Navigate to='/login'/>} /> 
+       <Route path='/communityChat' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<CommunityChat/>:<Navigate to='/login'/>} />
+       {/* <Route path='/communityChatNew' element={user.isBlocked ? <Navigate to='/forbiden' />:user.token !== null ?<CommunityChatNew/>:<Navigate to='/login'/>} />  */}
+
 
         {/*ADMIN-ROUTE*/}
         <Route path='/admin/*' element={<AdminRoute/>}/>

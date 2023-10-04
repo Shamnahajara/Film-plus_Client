@@ -13,11 +13,10 @@ function CommunityLanding() {
   const [userInfo,setUserinfo] = useState('')
 
   useEffect(()=>{
-    axiosInstance.get(`/user/userInfo/${userId}`).then((res)=>{
+    axiosInstance.get(`/user/userInfo`).then((res)=>{
       setUserinfo(res.data.user)
     })
   },[userId])
-  console.log(userInfo)
   const handleSubmit = () => {
     if (genre.trim().length === 0 || work.trim().length === 0 || language.trim().length === 0) {
         toast.error('Let us know your taste 😎');
