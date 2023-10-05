@@ -169,7 +169,7 @@ const deleteReview = (reviewId)=>{
                                     </div>
                                     {/* watch button */}
                                     <div className='sm:col-span-2 col-span-3 flex justify-end font-medium text-sm '>
-                                        <Link to={`/watch/${movie._id}`} className='bg-dry hover:bg-subMain transitions border-2 border-subMain rounded-full flex-rows gap-4 w-full sm:py-3 '>
+                                        <Link to={`/watch/${movie.tmdbId}`} className='bg-dry hover:bg-subMain transitions border-2 border-subMain rounded-full flex-rows gap-4 w-full sm:py-3 '>
                                             <FaPlay className='w-3 h-3' /> Watch
                                         </Link>
                                     </div>

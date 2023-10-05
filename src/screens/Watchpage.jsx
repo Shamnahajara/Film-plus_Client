@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { API_KEY ,imageURL } from '../api/constance';
 import { BiArrowBack } from 'react-icons/bi';
 import { FaCloudDownloadAlt, FaHeart, FaPlay } from 'react-icons/fa';
+import Movies from './movies';
 
 
 function Watchpage() {
@@ -31,6 +32,8 @@ function Watchpage() {
       });
   }, [id]);
 
+  console.log("movie",movie)
+
   return (
     <Layout>
       <div className='container mx-auto bg-dry p-6 mb-12'>
@@ -42,14 +45,14 @@ function Watchpage() {
             <BiArrowBack />
             {movie?.title}
           </Link>
-          <div className='flex-btn sm:w-auto w-full gap-5'>
+          {/* <div className='flex-btn sm:w-auto w-full gap-5'>
             <button className='bg-white hover:text-subMain transition bg-opacity-30 text-white rounded-md px-4 py-3 text-sm'>
               <FaHeart />
             </button>
             <button className='bg-subMain flex-rows gap-2 hover:text-main transition text-white rounded-md px-8 font-medium py-3 text-sm'>
               <FaCloudDownloadAlt /> Download
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* Watch video */}

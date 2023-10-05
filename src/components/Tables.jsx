@@ -33,7 +33,6 @@ const Rows = (movie,i,remove)=>{
 
 
 function Tables({data,remove}) {
-  console.log(data,'data')
 
   return (
     <div className='overflow-x-scroll overflow-hidden relative h-full'>

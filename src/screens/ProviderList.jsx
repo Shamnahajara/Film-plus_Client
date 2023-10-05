@@ -34,7 +34,7 @@ const Rows = (product,i,returned,sendMail)=>{
             </td>
             <td className={`${text} float-right flex-rows gap-2`}>
               {
-                !isOnDue && product.returned ?  <button onClick={()=>sendMail(product._id,product.productId._id)} className='border border-boarder flex-rows gap-2 text-blue-500  rounded flex-colo py-1 px-1 w-18 h-7'>
+                !isOnDue && !product.returned ?  <button onClick={()=>sendMail(product._id,product.productId._id)} className='border border-boarder flex-rows gap-2 text-blue-500  rounded flex-colo py-1 px-1 w-18 h-7'>
                 Send mail
                </button> : <span className="text-green-500 px-1">completed</span>
               }

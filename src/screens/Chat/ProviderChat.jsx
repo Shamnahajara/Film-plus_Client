@@ -6,6 +6,7 @@ import axiosInstance from '../../api/axios'
 import io from "socket.io-client"
 import { useParams } from 'react-router-dom'
 const END_POINT = "https://api.filmplus.website"
+// const END_POINT = "http://localhost:3000"
 let socket;
 
 function ProviderChat() {
@@ -55,7 +56,6 @@ function ProviderChat() {
     // ....CHAT-LISTS
     useEffect(() => {
         if (providerId) {
-
             axiosInstance.get(`/user/providerInfo/${providerId}`).then((res) => {
                 setProvider(res.data.provider)
             })
@@ -250,7 +250,7 @@ function ProviderChat() {
                                             {messages.map((message, i) => (
                                                 <div key={i} className='chat-message'>
                                                     {message.sender._id === userId ? (
-                                                        <div className='flex items-end justify-end'>
+                                                        <div className='flex items-end justify-end mb-1'>
                                                             <div className='flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end'>
                                                                 <div>
                                                                     <span className='px-4 py-2 rounded-lg inline-block rounded-bl-none bg-red-500 text-white'>
@@ -261,7 +261,7 @@ function ProviderChat() {
                                                             <img src={user?.profileImage} alt="" className='w-6 h-6 rounded-full order-2' />
                                                         </div>
                                                     ) : (
-                                                        <div className='flex items-end'>
+                                                        <div className='flex items-end mb-1'>
                                                             <div className='flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start'>
                                                                 <div>
                                                                     <span className='px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-200 text-gray-600'>

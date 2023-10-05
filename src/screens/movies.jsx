@@ -242,7 +242,7 @@ if(err?.response?.data?.errmsg){
         </div>
        
         <p className='text-lg font-medium my-6'>
-          Total <span className='font-bold text-subMain'>{movies.length}</span> Items founded
+          Total <span className='font-bold text-subMain'>{page}</span> Items founded
         </p>
         <div className='grid sm:mt-10 mt-6 xl:grid-cols-5 lg:grid-cols-3 sm:grid-cols-2 gap-6'>
           {movies.slice(0, page).map((movie, index) => (

@@ -1,10 +1,14 @@
 import { AiOutlinePaperClip } from 'react-icons/ai'
 import { RiSendPlaneFill } from 'react-icons/ri'
 import axiosInstance from '../../api/axios'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { CiMenuKebab } from 'react-icons/ci'
 import { toast } from 'react-hot-toast'
+import io from "socket.io-client"
+const END_POINT = "https://api.filmplus.website"
+// const END_POINT = "http://localhost:3000"
+let socket;
 
 
 function Chat() {
@@ -22,6 +26,20 @@ function Chat() {
     const [description, setDescription] = useState('')
     const [communitypro, setCommunityPro] = useState('')
     const [chatType, setChatType] = useState('community');
+    const [loading, setLoading] = useState(false)
+    const bottomRef = useRef()
+
+
+
+
+    useEffect(() => {
+        socket = io(END_POINT)
+        socket.emit('setup', userId)
+        socket.on('connection', chatId?._id)
+        return () => {
+            socket.disconnect()
+        }
+    }, [chatId._id])
 
     // ................USER-INFO
     useEffect(() => {
@@ -33,6 +51,7 @@ function Chat() {
     //..................CREATE-ONE-TO-ONE-CHAT
     const createChat = (recieverId) => {
         axiosInstance.post(`/user/createchat/${recieverId}`)
+        setLoading(!loading)
     }
 
     // .................ACCEPT-REQUST-TO-RECIEVER
@@ -48,6 +67,8 @@ function Chat() {
                     let updMsg = [...messages, res.data.msg];
                     setMessages(updMsg);
                     setMessage('');
+                    setLoading(!loading);
+                    socket.emit('new message', res?.data?.msg, chatId);
                 })
             }
         } catch (err) {
@@ -59,39 +80,33 @@ function Chat() {
     const accessmessage = async (recieverId) => {
         axiosInstance.get(`/user/accessmessage/${recieverId}`).then((res) => {
             setMessages(res.data.messages)
-            console.log("res.data",res.data.messages)
             setReciever(res.data.reciever)
             setChatId(res.data.chatId)
+            socket.emit('joinChat', chatId?._id)
+
         })
     }
-    console.log("reciever",reciever)
-
 
     // ....................SELECTED-GROUP-MESSAGE-POPULATE-MESSAGE
     const accessCommunityMsg = (chatId) => {
-        console.log("this function")
-    
         axiosInstance.get(`/user/accesscommunitymsg/${chatId}`).then((res) => {
             setChatId(res.data.chatId)
             setMessages(res.data.messages)
-
+            socket.emit('joinChat', chatId?._id)
         })
     }
-    console.log("messages", messages)
 
     // .................CHAT-LIST-OF-USER-ONE-TO-ONE
     useEffect(() => {
         axiosInstance.get(`/user/chatlist/${userId}`).then((res) => {
             setChatList(res.data.oneOnOneChats)
             setgrpChat(res.data.groupChats)
-            console.log(res.data.oneOnOneChats)
-            console.log(res.data.groupChats)
 
 
         }).catch((err) => {
             console.error("chatlist error", err)
         })
-    }, [userId]);
+    }, [userId,loading]);
 
 
     //...............COMMUNITY-LIST-OF-USER
@@ -99,7 +114,7 @@ function Chat() {
         axiosInstance.get('/user/communitylist').then((res) => {
             setCommunitylist(res.data.communityList)
         })
-    }, [userId])
+    }, [userId,loading])
 
     //..................SUGGESTING-SIMILAR-USERS
     useEffect(() => {
@@ -108,7 +123,7 @@ function Chat() {
         }).catch((err) => {
             console.error('no users', err)
         })
-    }, [userId]);
+    }, [userId,loading]);
 
     function isValidImage(logo) {
         const validExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
@@ -141,6 +156,7 @@ function Chat() {
                     toast.error(res.data.errMsg)
                 } else {
                     toast.success(res?.data?.message)
+                    setLoading(!loading)
                 }
             })
         }
@@ -151,6 +167,17 @@ function Chat() {
             toast.success(res.data.message)
         })
     }
+
+    useEffect(() => {
+        socket.on('messageResponse', (msg, room) => {
+
+            if (room === chatId?._id) {
+                let updMsg = [...messages, msg];
+                setMessages(updMsg)
+            }
+        })
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages, chatId]);
 
 
     return (
@@ -197,7 +224,7 @@ function Chat() {
                                     <label className="label">
                                         <span className="label-text">Community Profile</span>
                                     </label>
-                                    <input type="file" name="photo" accept=".jpg,.jpeg,.png" id="file" onChange={handleImageChange} 
+                                    <input type="file" name="photo" accept=".jpg,.jpeg,.png" id="file" onChange={handleImageChange}
                                         className="file-input file-input-bordered w-full max-w-xs" />
                                 </div>
                                 <button onClick={createCommunity} className="btn btn-sm bg-subMain mt-2">Create</button>
@@ -255,7 +282,7 @@ function Chat() {
                                                             return (
                                                                 <div
                                                                     onClick={() => {
-                                                                        accessmessage(otherUsers[0]._id);
+                                                                        accessmessage(otherUsers[0]?._id);
                                                                     }} key={i} className="relative rounded-lg px-2 py-2 flex items-start space-x-3 hover:border-gray-400 focus-within:ring-2 mb-3 bg-gray-200">
                                                                     <div className="flex-shrink-0">
                                                                         <img src={otherUsers[0]?.profileImage} alt="" className="w-10 h-10 rounded-full" />
@@ -264,10 +291,10 @@ function Chat() {
                                                                         <a className="focus:outline-none">
                                                                             <div className="flex items-center justify-between">
                                                                                 <p className="text-sm font-bold text-red-600">{otherUsers[0]?.name}</p>
-                                                                                <div className="text-gray-400 text-xs">{new Date(chat.createdAt).toLocaleDateString()}</div>
+                                                                                <div className="text-gray-400 text-xs">{new Date(chat?.createdAt).toLocaleDateString()}</div>
                                                                             </div>
                                                                             <div className="flex items-center justify-between">
-                                                                                <p className="text-sm text-gray-500 truncate">{chat.latestMessage.message}</p>
+                                                                                <p className="text-sm text-gray-500 truncate">{chat?.latestMessage?.message}</p>
                                                                                 {
                                                                                     chat.requested.accepted ? "" : <div className="text-white text-xs bg-blue-400 rounded-full px-1 py-0">Requested</div>
                                                                                 }
@@ -324,15 +351,23 @@ function Chat() {
                                                     <div className='flex items-center space-x-4'>
                                                         {
                                                             chatId?.isGroupchat == true ?
-                                                            
-                                                              <img src={chatId?.groupProfile} alt='group profile' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full border-none cursor-pointer' />
+
+                                                                <img src={chatId?.groupProfile} alt='group profile' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full border-none cursor-pointer' />
                                                                 :
-                                                              <img src={reciever?.profileImage} alt='user profile' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full border-none cursor-pointer' />
+                                                                <img src={reciever?.profileImage} alt='user profile' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full border-none cursor-pointer' />
 
                                                         }
                                                         <div className='flex flex-col leading-tight'>
                                                             <div className='text-xl mt-1 flex items-center'>
+                                                                {/* {
+                                                                    !chatId?.isGroupchat ?
+                                                                        <span className='text-gray-700 mr-3'>{reciever?.name}</span>
+                                                                        :
+                                                                        <span className='text-gray-700 mr-3'>-------</span>
+
+                                                                } */}
                                                                 <span className='text-gray-700 mr-3'>{reciever?.name}</span>
+
                                                                 {/* <span className='text-green-500'>
                                                                         <svg width={10} height={10}>
                                                                             <circle cx={5} cy={5} r={5} fill='currentColor' />
@@ -354,7 +389,7 @@ function Chat() {
                                                             <div id="toast-interactive" className="w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow dark:bg-gray-800 dark:text-gray-400" role="alert">
                                                                 <div className="flex">
                                                                     <div className="ml-3 text-sm font-normal">
-                                                                        <span className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">Accept request</span>
+                                                                        <span className="mb-1 text-sm font-semibold text-gray-900 dark:text-white"> Requested</span>
                                                                         <div className="mb-2 text-sm font-normal">You requested to connect with {reciever.name} .After Accepted your request you cant start sending messages  </div>
                                                                     </div>
                                                                     <button type="button" className="ml-auto -mx-1.5 -my-1.5 bg-white items-center justify-center flex-shrink-0 text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-interactive" aria-label="Close">
@@ -397,17 +432,23 @@ function Chat() {
                                                 <div className=' flex-1 p-2 sm:pb-6 justify-between flex flex-col h-screen xl:flex'>
                                                     <div className='flex sm:items-center justify-between border-b border-gray-200 py-3'>
                                                         <div className='flex items-center space-x-4'>
-                                                        {
-                                                            chatId?.isGroupchat == true ?
-                                                            
-                                                              <img src={chatId?.groupProfile} alt='group profile' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full border-none cursor-pointer' />
-                                                                :
-                                                              <img src={reciever?.profileImage} alt='user profile' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full border-none cursor-pointer' />
+                                                            {
+                                                                chatId?.isGroupchat == true ?
 
-                                                        }
+                                                                    <img src={chatId?.groupProfile} alt='group profile' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full border-none cursor-pointer' />
+                                                                    :
+                                                                    <img src={reciever?.profileImage} alt='user profile' className='w-10 sm:w-12 h-10 sm:h-12 rounded-full border-none cursor-pointer' />
+
+                                                            }
                                                             <div className='flex flex-col leading-tight'>
                                                                 <div className='text-xl mt-1 flex items-center'>
-                                                                    <span className='text-gray-700 mr-3'>{reciever?.name}</span>
+                                                                    {
+                                                                        !chatId?.isGroupchat ?
+                                                                            <span className='text-gray-700 mr-3'>{reciever?.name}</span>
+                                                                            :
+                                                                            <span className='text-gray-700 mr-3'>{chatId?.chatName}</span>
+
+                                                                    }
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -456,7 +497,7 @@ function Chat() {
                                                                                 )}
                                                                             </div>
                                                                         ))}
-                                                                        {/* <div ref={bottomRef} /> */}
+                                                                        <div ref={bottomRef} />
                                                                     </div>
                                                                 )
                                                             }

@@ -41,11 +41,11 @@ function SideBar({ children }) {
             link: "/userreviewlist",
             icon: MdRateReview
         },
-        {
-            name: "Change Password",
-            link: "/password",
-            icon: RiLockPasswordFill
-        }
+        // {
+        //     name: "Change Password",
+        //     link: "/password",
+        //     icon: RiLockPasswordFill
+        // }
     ]
     const active = 'bg-dryGray text-subMain'
     const hover = 'hover:text-white hover:bg-main'
