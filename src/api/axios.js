@@ -3,7 +3,7 @@ import {Store} from '../store/store'
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000/',
+    baseURL: 'https://api.filmplus.website/',
     headers: {
         'Content-Type': 'application/json'
     }
